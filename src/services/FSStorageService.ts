@@ -2,18 +2,16 @@ import fs from 'fs';
 import path from 'path';
 
 class FSStorageService {
-  private storagePath = 'uploads';
+  constructor(private readonly storagePath: string) {}
 
-  async addFile(file: Express.Multer.File): Promise<void> {
-    const fileName = path.basename(file.path);
-    console.log('path', this.storagePath, fileName);
-
-    const dest = path.join(this.storagePath, fileName);
-    fs.renameSync(file.path, dest);
+  async getNumberOfFiles(): Promise<Number> {
+    const files = await fs.promises.readdir(this.storagePath);
+    const fileCount = files.filter((file) => path.extname(file) !== '').length;
+    return fileCount;
   }
 
   async getOldestFiles(count: number): Promise<string[]> {
-    const files = fs
+    return fs
       .readdirSync(this.storagePath)
       .map((name) => ({
         name,
@@ -22,8 +20,6 @@ class FSStorageService {
       .sort((a, b) => a.time - b.time)
       .slice(0, count)
       .map((f) => f.name);
-
-    return files;
   }
 }
 
