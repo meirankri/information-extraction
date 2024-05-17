@@ -4,9 +4,11 @@ node_modules
 dist
 # environmental variables
 .env
+.env.production
 # yarn error log
 yarn-error.log
 # vscode config
 .vscode
 #coverage
 coverage
+.vercel
