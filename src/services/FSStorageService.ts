@@ -1,10 +1,11 @@
+import { StorageRepository } from '@/api/types/interfaces';
 import fs from 'fs';
 import path from 'path';
 
-class FSStorageService {
+class FSStorageService implements StorageRepository {
   constructor(private readonly storagePath: string) {}
 
-  async getNumberOfFiles(): Promise<Number> {
+  async getNumberOfFiles(): Promise<number> {
     const files = await fs.promises.readdir(this.storagePath);
     const fileCount = files.filter((file) => path.extname(file) !== '').length;
     return fileCount;

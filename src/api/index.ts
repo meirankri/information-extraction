@@ -3,6 +3,8 @@ import multer from 'multer';
 import path from 'path';
 
 import StorageService from '../services/FSStorageService';
+import File from './usecase/File';
+import { roundNumber } from '../utils/number';
 // import RoundNumberChecker from '../utils/roundNumberChecker';
 // import FileProcessor from '../services/FileProcessor';
 // import DataExtractor from '../services/DataExtractor';
@@ -27,12 +29,15 @@ router.post('/upload', async (req: Request, res: Response) => {
       return res.status(500).send(err);
     }
   });
-  //TODO i need to use a usecase that have storageService as a depedency
   const storageService = new StorageService(
     path.join(__dirname, '..', 'uploads'),
   );
-  const numberOfFiles = await storageService.getNumberOfFiles();
-  console.log(numberOfFiles);
+  const file = new File(storageService);
+
+  const numberOfFiles = await file.getNumberOfFiles();
+  const roundedNumber = roundNumber(numberOfFiles);
+  let response: object = {};
+  if (!roundedNumber) response = { message: 'files is under 10' };
 
   // const files = req.files as Express.Multer.File[];
 
@@ -54,7 +59,7 @@ router.post('/upload', async (req: Request, res: Response) => {
   //   }
   // }
 
-  res.send('Files uploaded and processed');
+  res.json(response);
 });
 
 export default router;

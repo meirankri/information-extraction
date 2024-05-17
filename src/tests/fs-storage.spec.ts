@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import fsStorage from '../services/FSStorageService';
-
+import File from '../api/usecase/File';
 describe('test the file system storage class', () => {
   beforeAll(async () => {
     const directoryPath = path.join(__dirname, 'uploads');
@@ -36,7 +36,8 @@ describe('test the file system storage class', () => {
 
   test('check the number of file of the upload folder except the gitignore', async () => {
     const storage = new fsStorage(`${__dirname}/uploads`);
-    const numberOfFiles = await storage.getNumberOfFiles();
+    const file = new File(storage);
+    const numberOfFiles = await file.getNumberOfFiles();
     console.log(numberOfFiles);
 
     expect(numberOfFiles).toEqual(3);

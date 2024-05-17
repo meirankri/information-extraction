@@ -8,9 +8,13 @@
     "target": "es2021",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "experimentalDecorators": true,
-    "strict": true
+    "strict": true,
+
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "src/**/*.spec.ts"]
